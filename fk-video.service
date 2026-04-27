@@ -1,0 +1,18 @@
+[Unit]
+Description=Starter RTSP-strøm fra kamera
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/python3 /home/stale/fk-kam/rtsp-server.py
+WorkingDirectory=/home/stale/fk-kam
+StandardOutput=journal
+StandardError=journal
+Restart=always
+RestartSec=5
+User=stale
+StandardOutput=null
+StandardError=journal
+LogLevelMax=warning
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,18 @@
+[Unit]
+Description=Fuglekasse lysstyring
+After=network.target
+
+[Service]
+Type=simple
+User=pi
+WorkingDirectory=/home/pi/fk-kam
+ExecStart=/usr/bin/python3 /home/pi/fk-kam/fuglekasse_lys.py
+Restart=on-failure
+RestartSec=30
+
+# Begrens logging til journald
+StandardOutput=null
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

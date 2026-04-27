@@ -1,0 +1,27 @@
+[Unit]
+Description=Motion bevegelsesdeteksjon - fk-kam
+Documentation=https://motion-project.github.io/motion_guide.html
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=stale
+Group=stale
+
+ExecStart=/usr/bin/motion -c /home/stale/fk-kam/motion_fk-kam.conf
+
+# Start på nytt ved feil, men ikke ved ren exit (f.eks. manuell stopp)
+Restart=on-failure
+RestartSec=15s
+
+# Maks 5 restartar per 5 minutt, deretter gir systemd opp
+StartLimitIntervalSec=300
+StartLimitBurst=5
+
+# Vent maks 10 sek på at prosessen stopper ved shutdown
+TimeoutStopSec=10s
+KillMode=process
+
+[Install]
+WantedBy=multi-user.target
