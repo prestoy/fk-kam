@@ -55,11 +55,12 @@ def sett_pwm(chip, prosent):
 
 def hent_tider(dato: date) -> tuple[datetime, datetime]:
     """Returner (lys_på, lys_av) for en gitt dato.
-    Lyset slås på ved soloppgang + buffer og av ved solnedgang - buffer.
+    Bruker separate kall for soloppgang og solnedgang for å unngå
+    feil ved midnattsol (mai–juli i Trondheim).
     """
-    s = sun(LOKASJON.observer, date=dato, tzinfo=LOKASJON.timezone)
-    lys_paa = s["sunrise"] + timedelta(minutes=BUFFER_MIN)
-    lys_av  = s["sunset"]  - timedelta(minutes=BUFFER_MIN)
+    from astral.sun import sunrise, sunset
+    lys_paa = sunrise(LOKASJON.observer, date=dato, tzinfo=LOKASJON.timezone) + timedelta(minutes=BUFFER_MIN)
+    lys_av  = sunset(LOKASJON.observer, date=dato, tzinfo=LOKASJON.timezone)  - timedelta(minutes=BUFFER_MIN)
     return lys_paa, lys_av
 
 
